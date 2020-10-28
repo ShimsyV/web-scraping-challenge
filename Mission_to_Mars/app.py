@@ -29,7 +29,7 @@ def scrape():
 
     # scrape_mars.scrape() is a custom function that we've defined in the scrape_mars.py file within this directory
     mars_data = scrape_mars.scrape()
-   mars.insert_one(mars_data)
+    mars.insert_one(mars_data)
     
     # Use Flask's redirect function to send us to a different route once this task has completed.
     return redirect("/")
