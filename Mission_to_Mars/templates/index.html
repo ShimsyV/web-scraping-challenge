@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Mission to Mars</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+  <div class="jumbotron text-center">
+    <h1>Mission to Mars</h1>
+    <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a></p>
+  </div>
+  {% for data in mars_results %}
+  <div class="container" id="comparison">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Latest Mars News</h1>
+            <hr class="my-4">
+        </div>            
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h3>{{ data.news_title }}</h3>
+        <p>{{ data.news_p }}</p>
+        <br>
+      </div>            
+    </div>
+    
+    <div class="row">
+      <div class="col-md-9">
+        <div class="card" id="no_border" >
+          <div class="card-body" id="data">
+            <h3 class="card-title">Featured Mars Image</h3>
+            <img src= {{ data.featured_image_url }} alt="Featured Mars Image">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card" id="no_border" >
+          <div class="card-body" id="data">
+            <h3 class="card-title">Mars Facts</h3>
+            <table class="table table-striped table-bordered table-sm">
+              <thead>
+                <tr>
+                  <th scope="col">Description</th>
+                  <th scope="col">Mars</th>
+                </tr>
+              </thead>
+              <tbody>
+    
+                <!-- Within the table body, create a new table row (<tr>) for each player in our database. -->
+                {% for info in data.mars_tbl_info %}
+                <tr>
+                  <td>{{ info.name }}</td>
+                  <td>{{ info.value }}</td>
+                </tr>
+                {% endfor %}
+    
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <br><br>
+    <div class="row">
+      <div class="col-md-12 text-center">
+          <h3>Mars Hemispheres</h3>
+          <hr class="my-4">
+      </div>            
+    </div>
+
+
+    <div class="row row-cols-1 row-cols-md-2">
+      <div class="col mb-4">
+        <div class="card">
+          <img class="visual" src={{ data.hemisphere_image_urls[0].img_url }} class="card-img-top" alt={{ data.hemisphere_image_urls[0].title }}>
+          <div class="card-body">
+            <h5 class="card-title">{{ data.hemisphere_image_urls[0].title }}</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col mb-4">
+        <div class="card">
+          <img class="visual" src={{ data.hemisphere_image_urls[1].img_url }} class="card-img-top" alt={{ data.hemisphere_image_urls[1].title }}>
+          <div class="card-body">
+            <h5 class="card-title">{{ data.hemisphere_image_urls[1].title }}</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col mb-4">
+        <div class="card">
+          <img class="visual" src={{ data.hemisphere_image_urls[2].img_url }} class="card-img-top" alt={{ data.hemisphere_image_urls[2].title }}>
+          <div class="card-body">
+            <h5 class="card-title">{{ data.hemisphere_image_urls[2].title }}</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col mb-4">
+        <div class="card">
+          <img class="visual" src={{ data.hemisphere_image_urls[3].img_url }} class="card-img-top" alt={{ data.hemisphere_image_urls[3].title }}>
+          <div class="card-body">
+            <h5 class="card-title">{{ data.hemisphere_image_urls[3].title }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  {% endfor %}
+ 
+
+  
+      
+    
+</body>
+
+</html>
