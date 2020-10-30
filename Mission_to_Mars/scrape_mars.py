@@ -2,6 +2,7 @@ from splinter import Browser
 from bs4 import BeautifulSoup
 import requests
 import time
+import pandas as pd
 
 def init_browser():
     executable_path = {'executable_path': 'chromedriver.exe'}
@@ -48,16 +49,14 @@ def scrape():
 
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
-    image = soup.find_all('article', class_='carousel_item')
-
-    # print(len(image))
-
-    s_url = 'https://www.jpl.nasa.gov'
-    e_url = image[0].find('a', class_='button fancybox')['data-fancybox-href']
-    print(f'Partial image url: {e_url}')
-
-    featured_image_url = s_url + e_url
-    print(f'Complete image url: {featured_image_url}\n')
+    
+    browser.click_link_by_partial_text('FULL IMAGE')
+    url_jpl2 = 'https://www.jpl.nasa.gov' + soup.find('a', class_='button')['data-link']
+    browser.visit(url_jpl2)
+    html = browser.html
+    soup = BeautifulSoup(html, 'html.parser')
+    featured_image_url = 'https://www.jpl.nasa.gov' + soup.find('figure', class_='lede').a['href']
+    print(featured_image_url)
 
     mars_data['featured_image_url'] = featured_image_url
 
