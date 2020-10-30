@@ -94,42 +94,42 @@ def scrape():
     print('Finding Mars hemispheres.....\n')
 
     url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
+    # response = requests.get(url)
+    browser.visit(url)
+    html_hemispheres = browser.html
+    soup = BeautifulSoup(html_hemispheres, 'html.parser')
 
     time.sleep(num)
 
-    links = soup.find_all('div', class_='item')
-    print(len(links))
+    items = soup.find_all('div', class_='item')
+    print(len(items))
 
-    b_url = 'https://astrogeology.usgs.gov'
-    page_list = []
-
-    for link in links:
-        img_page = link.find('a', class_='itemLink product-item')['href']
-        print(f'Partial image url: {img_page}')
-        page_url = b_url + img_page
-        page_list.append(page_url)
-
-    print(f'List of pages: {page_list}')
-
+    hemisphere_main_url = 'https://astrogeology.usgs.gov'
     hemisphere_image_urls = []
-    
-    for url in page_list:
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        data = soup.find_all('div', class_='downloads')
-        hemi_img_url = data[0].find('a')['href']
-        
-        print(f'Complete image url: {hemi_img_url}')
 
-        data = soup.find_all('section', class_='block metadata')
-        title = data[0].find('h2', class_='title').text
-        hemi_title = title.replace('Enhanced', '').rstrip()
+    for i in items:
+        title = i.find('h3').text
+    
+    # Store link that leads to full image website
+        partial_img_url = i.find('a', class_='itemLink product-item')['href']
+    
+    # Visit the link that contains the full image website 
+        browser.visit(hemisphere_main_url + partial_img_url)
+    
+    # HTML Object of individual hemisphere information website 
+        partial_img_html = browser.html
+    
+    # Parse HTML with Beautiful Soup for every individual hemisphere information website 
+        soup = BeautifulSoup( partial_img_html, 'html.parser')
+    
+    # Retrieve full image source 
+        img_url = hemisphere_main_url + soup.find('img', class_='wide-image')['src']
+    
+    # Append the retreived information into a list of dictionaries 
+        hemisphere_image_urls.append({"title" : title, "img_url" : img_url})
+
+            
         
-        print(hemi_title)
-        
-        hemisphere_image_urls.append({'title': hemi_title, 'img_url': hemi_img_url})
 
     print(f'List of hemisphere urls: {hemisphere_image_urls}')
     
